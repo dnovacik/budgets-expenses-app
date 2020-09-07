@@ -24,12 +24,15 @@ export default {
     light: {
       'shade-1': '#ffffff',
       'shade-2': '#e5e5e5',
+      'shade-3': '#5393de'
     },
   },
   font: {
-    family: 'Montserrat',
-    familySemiBold: 'Montserrat-SemiBold',
-    familyBold: 'Montserrat-Bold',
+    familyRegular: 'Lato',
+    familyThin: 'Lato-Thin',
+    familyLight: 'Lato-Light',
+    familyBold: 'Lato-Bold',
+    familyBlack: 'Lato-Black',
     size: {
       smallest: '12px',
       smaller: '14px',

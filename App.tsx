@@ -15,8 +15,6 @@ import theme from './src/styled-components/theme'
 export default () => {
   const [isAppReady, setAppReady] = useState(false)
 
-  console.log(isAppReady)
-
   const _loadResourcesAsync = async () => {
     await _loadFontsAsync()
     await _loadImagesAsync()
@@ -37,11 +35,11 @@ export default () => {
 
   const _loadFontsAsync = async (): Promise<void> => {
     const fonts = {
-      'Montserrat': require('./src/assets/fonts/Montserrat-Regular.ttf'),
-      'Montserrat-Light': require('./src/assets/fonts/Montserrat-Light.ttf'),
-      'Montserrat-Medium': require('./src/assets/fonts/Montserrat-Medium.ttf'),
-      'Montserrat-SemiBold': require('./src/assets/fonts/Montserrat-SemiBold.ttf'),
-      'Montserrat-Bold': require('./src/assets/fonts/Montserrat-Bold.ttf')
+      'Lato': require('./src/assets/fonts/Lato-Regular.ttf'),
+      'Lato-Light': require('./src/assets/fonts/Lato-Light.ttf'),
+      'Lato-Thin': require('./src/assets/fonts/Lato-Thin.ttf'),
+      'Lato-Black': require('./src/assets/fonts/Lato-Black.ttf'),
+      'Lato-Bold': require('./src/assets/fonts/Lato-Bold.ttf')
     }
 
     return Font.loadAsync(fonts)
