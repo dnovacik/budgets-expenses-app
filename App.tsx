@@ -6,6 +6,9 @@ import * as Font from 'expo-font'
 import { StatusBar } from 'react-native';
 import { ThemeProvider } from 'styled-components/native'
 
+// services
+import { initializeBudgets } from './src/services/store'
+
 // components
 import App from './src/views/App'
 
@@ -14,6 +17,11 @@ import theme from './src/styled-components/theme'
 
 export default () => {
   const [isAppReady, setAppReady] = useState(false)
+
+  const _loadAppAsync = async () => {
+    await initializeBudgets()
+    await _loadResourcesAsync()
+  }
 
   const _loadResourcesAsync = async () => {
     await _loadFontsAsync()
@@ -59,7 +67,7 @@ export default () => {
     return (
       <AppLoading
         // @ts-ignore
-        startAsync={_loadResourcesAsync}
+        startAsync={_loadAppAsync}
         onError={_handleLoadingError}
         onFinish={_handleFinishLoading}
         autoHideSplash={true}

@@ -6,6 +6,13 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Dimensions, Platform, FlatList } from 'react-native'
 import moment from 'moment'
 
+// services
+import { cachedBudgets } from './../../../services/store'
+import { getMonthsInYearFromNow } from '../../../services/date'
+
+//models
+import { BudgetAndExpenses, MonthsOutput, Budget } from '../../../models'
+
 interface Slice {
   label: string
   value: number
@@ -22,6 +29,7 @@ const SLICE_SPACING = width * 0.2
 export default () => {
   const [selectedSlice, setSelectedSlice] = useState<Slice>()
   const [currentSliceIndex, setCurrentSliceIndex] = useState(0)
+  const [currentBudget, setCurrentBudget] = useState<Budget | null>(null)
 
   const keys = ['google', 'facebook', 'linkedin', 'youtube', 'Twitter']
   const values = [15, 25, 35, 45, 55].reverse()
@@ -37,7 +45,12 @@ export default () => {
     }
   })
 
-  const flatListData = moment.months()
+  const months = getMonthsInYearFromNow()
+
+  useEffect(() => {
+    const monthBudget = cachedBudgets.budgets.find(b => b.date === months[currentSliceIndex].key)
+    setCurrentBudget(monthBudget ?? null)
+  }, [currentSliceIndex])
 
   useEffect(() => {
     setSelectedSlice({ label: data[0].key, value: data[0].value })
@@ -49,7 +62,7 @@ export default () => {
       <Stats.MonthSliderWrapper>
         <Stats.MonthSlider
           horizontal={true}
-          data={flatListData}
+          data={months}
           keyExtractor={(item, index) => `${item}-${index}`}
           showsHorizontalScrollIndicator={false}
           decelerationRate={'fast'}
@@ -67,12 +80,13 @@ export default () => {
           }}
           contentContainerStyle={{
             paddingHorizontal: Platform.OS === 'android' ? SLICE_SPACING : 0,
+            paddingRight: SLICE_SPACING * 2.5,
             alignItems: 'center'
           }}
           renderItem={({ item, index }) =>
             (
               <Stats.SlideWrapper>
-                <Stats.SlideText isActive={index === currentSliceIndex}>{item}</Stats.SlideText>
+                <Stats.SlideText isActive={index === currentSliceIndex}>{item.name}</Stats.SlideText>
               </Stats.SlideWrapper>
             )
           }
@@ -87,8 +101,8 @@ export default () => {
           </Stats.MonthSliderPointer>
       </Stats.MonthSliderWrapper>
       <Stats.TotalExpensesWrapper>
-        <Stats.TotalExpensesCurrency>$</Stats.TotalExpensesCurrency>
-        <Stats.TotalExpensesTitle>1926</Stats.TotalExpensesTitle>
+        <Stats.TotalExpensesCurrency>€</Stats.TotalExpensesCurrency>
+        <Stats.TotalExpensesTitle>{currentBudget?.budget}</Stats.TotalExpensesTitle>
         <Stats.TotalExpensesSubTitle>.56</Stats.TotalExpensesSubTitle>
         {/* <Stats.ChartText>{selectedSlice?.value}</Stats.ChartText> */}
       </Stats.TotalExpensesWrapper>
@@ -132,7 +146,7 @@ const Stats = {
     align-items: flex-start;
     height: 10%;
   `,
-  MonthSlider: Styled(FlatList as new () => FlatList<string>)`
+  MonthSlider: Styled(FlatList as new () => FlatList<MonthsOutput>)`
     display: flex;
   `,
   MonthSliderPointer: Styled.Text`

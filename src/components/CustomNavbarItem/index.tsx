@@ -18,7 +18,8 @@ const CustomNavbarItem = {
   Wrapper: Styled.View`
     display: flex;
     flex-direction: column;
-    background-color: red;
+    align-items: center;
+    justify-content: center;
     height: 70px;
     width: 70px;
   `
