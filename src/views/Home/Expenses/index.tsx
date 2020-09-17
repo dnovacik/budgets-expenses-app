@@ -333,14 +333,14 @@ const Expenses = {
   `,
   SideTitle: Styled.Text`
     display: flex;
-    width: 250px;
+    width: 270px;
     font-size: ${(props) => props.theme.font.size.large};
     color: ${(props) => props.theme.colors.light['shade-1']};
     font-family: ${(props) => props.theme.font.familyRegular};
     text-transform: uppercase;
     align-self: center;
     transform: rotate(-90deg);
-    padding-left: 20px;
+    padding-left: 45px;
   `,
   ChartWrapper: Styled.ScrollView`
     display: flex;
