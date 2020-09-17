@@ -3,7 +3,9 @@
 export enum ExpenseType {
   GROCERIES = 'GROCERIES',
   ENTERTAINMENT = 'ENTERTAINMENT',
-  BILLS = 'BILLS'
+  BILLS = 'BILLS',
+  MORTGAGE = 'MORTGAGE',
+  CLOTHES = 'CLOTHES'
 }
 
 export interface Expense {
@@ -12,9 +14,10 @@ export interface Expense {
 }
 
 export interface Budget {
-  date: string
+  id: string
   budget: number
   expenses: Expense[]
+  total: number
 }
 
 export interface BudgetAndExpenses {
@@ -25,4 +28,5 @@ export interface BudgetAndExpenses {
 export interface MonthsOutput {
   key: string
   name: string
+  year: string
 }

@@ -6,8 +6,11 @@ import * as Font from 'expo-font'
 import { StatusBar } from 'react-native';
 import { ThemeProvider } from 'styled-components/native'
 
+// store
+import { initializeStore } from './src/store/index'
+
 // services
-import { initializeBudgets } from './src/services/store'
+import EventEmitter from './src/services/event'
 
 // components
 import App from './src/views/App'
@@ -17,9 +20,16 @@ import theme from './src/styled-components/theme'
 
 export default () => {
   const [isAppReady, setAppReady] = useState(false)
+  const [isStoreReady, setStoreReady] = useState(false)
+
+  EventEmitter.addListener('store-ready', () => handleStoreReady())
+
+  const handleStoreReady = () => {
+    setStoreReady(true)
+  }
 
   const _loadAppAsync = async () => {
-    await initializeBudgets()
+    initializeStore()
     await _loadResourcesAsync()
   }
 
@@ -63,7 +73,7 @@ export default () => {
     setAppReady(true)
   }
 
-  if (!isAppReady) {
+  if (!isAppReady || !isStoreReady) {
     return (
       <AppLoading
         // @ts-ignore

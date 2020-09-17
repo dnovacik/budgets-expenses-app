@@ -4,10 +4,12 @@ import Styled from 'styled-components/native'
 import { PieChart } from 'react-native-svg-charts'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Dimensions, Platform, FlatList } from 'react-native'
-import moment from 'moment'
+import { observer } from 'mobx-react'
+
+// store
+import RootStore from './../../../store/index'
 
 // services
-import { cachedBudgets } from './../../../services/store'
 import { getMonthsInYearFromNow } from '../../../services/date'
 
 //models
@@ -26,7 +28,7 @@ const { width, height } = Dimensions.get('window')
 const SLICE_WIDTH = width * 0.3
 const SLICE_SPACING = width * 0.2
 
-export default () => {
+export default observer(() => {
   const [selectedSlice, setSelectedSlice] = useState<Slice>()
   const [currentSliceIndex, setCurrentSliceIndex] = useState(0)
   const [currentBudget, setCurrentBudget] = useState<Budget | null>(null)
@@ -48,7 +50,7 @@ export default () => {
   const months = getMonthsInYearFromNow()
 
   useEffect(() => {
-    const monthBudget = cachedBudgets.budgets.find(b => b.date === months[currentSliceIndex].key)
+    const monthBudget = RootStore.budgets.find(b => b.id === months[currentSliceIndex].key)
     setCurrentBudget(monthBudget ?? null)
   }, [currentSliceIndex])
 
@@ -121,7 +123,7 @@ export default () => {
       </Stats.ChartWrapper>
     </Stats.Layout>
   )
-}
+})
 
 const Stats = {
   Layout: Styled(LinearGradient)`
