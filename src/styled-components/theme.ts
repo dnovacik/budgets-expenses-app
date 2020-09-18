@@ -36,7 +36,9 @@ export default {
     size: {
       smallest: '12px',
       smaller: '14px',
+      smallLess: '16px',
       small: '18px',
+      smallMedium: '20px',
       medium: '24px',
       mediumLarge: '32px',
       large: '46px',

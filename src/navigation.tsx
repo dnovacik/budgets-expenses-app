@@ -5,7 +5,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 
 // navbar
-import MyNavbar from './components/Navbar'
 import CustomNavbar from './components/CustomNavbar'
 
 // views
@@ -61,7 +60,7 @@ const Router = createStackNavigator()
 export default () => {
   return (
     <NavigationContainer>
-      <Router.Navigator headerMode="none" initialRouteName="Home">
+      <Router.Navigator headerMode="none" initialRouteName="Onboarding">
         <Router.Screen name="Onboarding" component={StackNavigator} />
         <Router.Screen name="Home" component={TabNavigator} />
       </Router.Navigator>
