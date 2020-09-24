@@ -115,7 +115,6 @@ export default observer(() => {
 
   return (
     <Expenses.Layout colors={['#0574e5', '#022b8d']}>
-      {/* <Expenses.Title>Expenses</Expenses.Title> */}
       <Expenses.MonthSliderWrapper>
         <Expenses.MonthSlider
           horizontal={true}
@@ -214,16 +213,6 @@ const Expenses = {
     flex-direction: column;
     align-items: center;
     flex: 1;
-  `,
-  Title: Styled.Text`
-    display: flex;
-    padding-left: ${SLICE_SPACING}px;
-    padding-top: 30px;
-    height: 10%;
-    width: 100%;
-    font-size: ${(props) => props.theme.font.size.medium};
-    color: ${(props) => props.theme.colors.light['shade-1']};
-    font-family: ${(props) => props.theme.font.familyRegular};
   `,
   MonthSliderWrapper: Styled.View`
     display: flex;
