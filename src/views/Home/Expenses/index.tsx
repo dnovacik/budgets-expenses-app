@@ -185,7 +185,7 @@ export default observer(() => {
           }}>{RootStore.totalExpenses()?.decimal}</Expenses.TotalExpensesSubAmount>
         </Expenses.TotalExpansesRow>
       </Expenses.TotalExpensesContainer>
-      <Expenses.ChartContainer>
+      <Expenses.BottomContainer>
         <Expenses.TitleWrapper>
           <Expenses.SideTitle>Expenses</Expenses.SideTitle>
         </Expenses.TitleWrapper>
@@ -202,7 +202,7 @@ export default observer(() => {
             renderChartBars()
           }
         </Expenses.ChartWrapper>
-      </Expenses.ChartContainer>
+      </Expenses.BottomContainer>
     </Expenses.Layout>
   )
 })
@@ -307,7 +307,7 @@ const Expenses = {
     font-family: ${(props) => props.theme.font.familyLight};
     padding-bottom: 4px;
   `,
-  ChartContainer: Styled.View`
+  BottomContainer: Styled.View`
     display: flex;
     height: 55%;
     width: 100%;

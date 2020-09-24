@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "project",
-    "slug": "project",
+    "name": "BudgetN'Expenses",
+    "slug": "budget_n_expenses",
     "platforms": [
       "ios",
       "android",
@@ -23,6 +23,9 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.ra6e.budget_n_expenses"
     }
   }
 }

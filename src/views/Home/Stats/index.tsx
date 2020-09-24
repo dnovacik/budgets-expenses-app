@@ -1,10 +1,11 @@
 // libs
 import React, { useState, useEffect } from 'react'
 import Styled from 'styled-components/native'
-import { PieChart } from 'react-native-svg-charts'
+import { LineChart } from 'react-native-svg-charts'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Dimensions, Platform, FlatList, Animated } from 'react-native'
 import { observer } from 'mobx-react'
+import * as shape from 'd3-shape'
 
 // store
 import RootStore, { IBudget } from './../../../store/index'
@@ -23,9 +24,8 @@ export default observer(() => {
   const [currentSliceIndex, setCurrentSliceIndex] = useState(0)
   const [currentYear, setCurrentYear] = useState('2020')
 
-  const keys = ['google', 'facebook', 'linkedin', 'youtube', 'Twitter']
-  const values = [15, 25, 35, 45, 55].reverse()
-  const colors = ['#79ffc6', '#79ffc6', '#79ffc6', '#79ffc6', '#79ffc6']
+  const data = [10, 25, 15, 20, 35, 50, 79, 17, 34, 62, 12]
+  const data2 = [10, 25, 15, 20, 35, 50, 79, 17, 34, 62, 12].reverse()
 
   const barHeightInterpolatedValue = new Animated.Value(0)
   const expensesOpacityInterpolatedValue = new Animated.Value(0)
@@ -120,14 +120,48 @@ export default observer(() => {
           }}>{RootStore.totalExpenses()?.decimal}</Stats.TotalExpensesSubAmount>
         </Stats.TotalExpansesRow>
       </Stats.TotalExpensesContainer>
-      <Stats.ChartContainer>
+      <Stats.BottomContainer>
         <Stats.TitleWrapper>
           <Stats.SideTitle>Stats</Stats.SideTitle>
         </Stats.TitleWrapper>
-        <Stats.ChartWrapper>
-
-        </Stats.ChartWrapper>
-      </Stats.ChartContainer>
+        <Stats.ChartsContainer
+          horizontal={false}
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          snapToAlignment={'start'}
+          contentContainerStyle={{
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+          <Stats.ChartWrapper>
+            <Stats.Chart
+              data={data}
+              curve={shape.curveBasis}
+              svg={{
+                strokeWidth: 2,
+                stroke: '#c0ffaa'
+              }} />
+          </Stats.ChartWrapper>
+          <Stats.ChartWrapper>
+            <Stats.Chart
+              data={data2}
+              curve={shape.curveBasis}
+              svg={{
+                strokeWidth: 2,
+                stroke: '#c0ffaa'
+              }} />
+          </Stats.ChartWrapper>
+          <Stats.ChartWrapper>
+            <Stats.Chart
+              data={data}
+              curve={shape.curveBasis}
+              svg={{
+                strokeWidth: 2,
+                stroke: '#c0ffaa'
+              }} />
+          </Stats.ChartWrapper>
+        </Stats.ChartsContainer>
+      </Stats.BottomContainer>
 
     </Stats.Layout>
   )
@@ -233,7 +267,7 @@ const Stats = {
     font-family: ${(props) => props.theme.font.familyLight};
     padding-bottom: 4px;
   `,
-  ChartContainer: Styled.View`
+  BottomContainer: Styled.View`
     display: flex;
     height: 55%;
     width: 100%;
@@ -257,16 +291,29 @@ const Stats = {
     transform: rotate(-90deg);
     padding-left: 45px;
   `,
+  ChartsContainer: Styled.ScrollView`
+    display: flex;
+    flex-direction: column;
+    height: 320px;
+    margin-right: 10px;
+    align-self: center;
+  `,
   ChartWrapper: Styled.View`
     display: flex;
     flex-direction: row;
-    width: ${width - SLICE_SPACING}px;
+    height: 150px;
+    width: 100%;
+    background-color: #235db6;
+    margin-bottom: 10px;
+    padding: 10px 0;
+    border-radius: 16px;
+    align-items: flex-end;
+    justify-content: center;
   `,
-  Chart: Styled(PieChart)`
+  Chart: Styled(LineChart)`
     display: flex;
     width: 90%;
-    height: 90%;
-    flex-direction: column;
+    height: 50%;
   `,
   ChartTextWrapper: Styled.View`
     display: flex;
