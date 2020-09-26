@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "BudgetN'Expenses",
-    "slug": "budget_n_expenses",
+    "name": "Budgets And Expenses",
+    "slug": "budgets_and_expenses",
     "platforms": [
       "ios",
       "android",
@@ -13,7 +13,7 @@
     "splash": {
       "image": "./src/assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#022b8d"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -25,7 +25,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.ra6e.budget_n_expenses"
+      "package": "com.ra6e.budgets.and.expenses"
     }
   }
 }

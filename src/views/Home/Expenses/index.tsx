@@ -20,7 +20,6 @@ interface ChartBar {
   height: number
 }
 
-const AnimatedView = Animated.View
 const AnimatedText = Animated.Text
 const AnimatedGradient = Animated.createAnimatedComponent(LinearGradient)
 
@@ -167,22 +166,42 @@ export default observer(() => {
       </Expenses.MonthSliderWrapper>
       <Expenses.TotalExpensesContainer>
         <Expenses.TotalExpansesRow>
-          <Expenses.TotalExpensesTitle>Total Expenses</Expenses.TotalExpensesTitle>
+          <Expenses.TotalExpensesSpacer></Expenses.TotalExpensesSpacer>
+          <Expenses.RowContainer>
+            <Expenses.TotalExpensesTitleWrapper>
+              <Expenses.TotalExpensesTitle>Total Expenses</Expenses.TotalExpensesTitle>
+            </Expenses.TotalExpensesTitleWrapper>
+            <Expenses.TotalBudgetTitleWrapper>
+              <Expenses.TotalBudgetTitle>Budget</Expenses.TotalBudgetTitle>
+            </Expenses.TotalBudgetTitleWrapper>
+          </Expenses.RowContainer>
         </Expenses.TotalExpansesRow>
         <Expenses.TotalExpansesRow>
+
           <Expenses.TotalExpensesCurrency>€</Expenses.TotalExpensesCurrency>
-          <Expenses.TotalExpensesAmount style={{
-            opacity: expensesOpacityInterpolatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 1]
-            })
-          }}>{RootStore.totalExpenses()?.wholeNumber}</Expenses.TotalExpensesAmount>
-          <Expenses.TotalExpensesSubAmount style={{
-            opacity: expensesOpacityInterpolatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 1]
-            })
-          }}>{RootStore.totalExpenses()?.decimal}</Expenses.TotalExpensesSubAmount>
+          <Expenses.RowContainer>
+            <Expenses.TotalExpensesAmountWrapper>
+              <Expenses.TotalExpensesAmount style={{
+                opacity: expensesOpacityInterpolatedValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 1]
+                })
+              }}>{RootStore.totalExpenses()?.wholeNumber}</Expenses.TotalExpensesAmount>
+              <Expenses.TotalExpensesSubAmount style={{
+                opacity: expensesOpacityInterpolatedValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 1]
+                })
+              }}>{RootStore.totalExpenses()?.decimal}</Expenses.TotalExpensesSubAmount>
+            </Expenses.TotalExpensesAmountWrapper>
+
+            <Expenses.TotalBudgetAmountWrapper>
+              <Expenses.TotalBudgetAmount>
+                {RootStore.selectedBudget?.budget}
+              </Expenses.TotalBudgetAmount>
+            </Expenses.TotalBudgetAmountWrapper>
+          </Expenses.RowContainer>
+
         </Expenses.TotalExpansesRow>
       </Expenses.TotalExpensesContainer>
       <Expenses.BottomContainer>
@@ -263,7 +282,7 @@ const Expenses = {
   TotalExpensesContainer: Styled.View`
     display: flex;
     flex-direction: column;
-    width: 55%;
+    width: 100%;
     align-self: flex-start;
     align-items: flex-end;
     justify-content: flex-end;
@@ -275,7 +294,20 @@ const Expenses = {
     width: 100%;
     flex-direction: row;
     align-items: flex-end;
-    justify-content: flex-start;
+  `,
+  RowContainer: Styled.View`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: ${width - SLICE_SPACING - 70}px;
+    align-items: center;
+  `,
+  TotalExpensesTitleWrapper: Styled.View`
+    display: flex;
+  `,
+  TotalExpensesSpacer: Styled.View`
+    display: flex;
+    width: ${SLICE_SPACING}px;
   `,
   TotalExpensesTitle: Styled.Text`
     display: flex;
@@ -283,7 +315,6 @@ const Expenses = {
     font-size: ${(props) => props.theme.font.size.smaller};
     color: ${(props) => props.theme.colors.light['shade-3']};
     font-family: ${(props) => props.theme.font.familyRegular};
-    padding-left: ${SLICE_SPACING}px;
   `,
   TotalExpensesCurrency: Styled.Text`
     display: flex;
@@ -293,6 +324,11 @@ const Expenses = {
     padding-bottom: 5px;
     width: ${SLICE_SPACING}px;
     text-align: center;
+  `,
+  TotalExpensesAmountWrapper: Styled.View`
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
   `,
   TotalExpensesAmount: Styled(AnimatedText)`
     display: flex;
@@ -306,6 +342,28 @@ const Expenses = {
     color: ${(props) => props.theme.colors.light['shade-3']};
     font-family: ${(props) => props.theme.font.familyLight};
     padding-bottom: 4px;
+  `,
+  TotalBudgetTitleWrapper: Styled.View`
+    display: flex;
+    align-items: flex-end;
+  `,
+  TotalBudgetTitle: Styled.Text`
+    display: flex;
+    font-size: ${(props) => props.theme.font.size.smaller};
+    color: ${(props) => props.theme.colors.light['shade-3']};
+    font-family: ${(props) => props.theme.font.familyRegular};
+  `,
+  TotalBudgetAmountWrapper: Styled.View`
+    display: flex;
+    flex-direction: row;
+  `,
+  TotalBudgetAmount: Styled.Text`
+    display: flex;
+    font-size: ${(props) => props.theme.font.size.large};
+    color: ${(props) => props.theme.colors.light['shade-1']};
+    font-family: ${(props) => props.theme.font.familyRegular};
+    align-self: flex-end;
+    align-content: flex-end;
   `,
   BottomContainer: Styled.View`
     display: flex;

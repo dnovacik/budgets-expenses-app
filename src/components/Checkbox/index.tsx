@@ -6,19 +6,23 @@ import { AntDesign } from '@expo/vector-icons'
 // theme
 import theme from '../../styled-components/theme'
 
-export default () => {
-  const [checked, setChecked] = useState(false)
+interface CheckboxProps {
+  label: string
+  checked: boolean
+  onCheckedChanged: (checked: boolean) => void
+}
 
+export default ({ label, checked, onCheckedChanged }: CheckboxProps) => {
   return (
     <Checkbox.Wrapper>
-      <Checkbox.TouchableWrapper onPress={() => setChecked(!checked)} onLongPress={() => setChecked(!checked)}>
+      <Checkbox.TouchableWrapper onPress={() => onCheckedChanged(!checked)} onLongPress={() => onCheckedChanged(!checked)}>
         <Checkbox.Box>
           {
             checked && <Checkbox.CheckX name={'check'} size={28} color={'#022b8d'} />
           }
         </Checkbox.Box>
         <Checkbox.LabelWrapper>
-          <Checkbox.Label>Totoka</Checkbox.Label>
+        <Checkbox.Label>{label}</Checkbox.Label>
         </Checkbox.LabelWrapper>
       </Checkbox.TouchableWrapper>
     </Checkbox.Wrapper>
@@ -30,15 +34,12 @@ const Checkbox = {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    height: 70px;
-    width: 150px;
+    justify-content: flex-start;
+    height: 50px;
   `,
   TouchableWrapper: Styled.TouchableOpacity`
     display: flex;
-    width: 100%;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
   `,
   Box: Styled.View`
@@ -67,6 +68,5 @@ const Checkbox = {
     font-size: ${(props) => props.theme.font.size.smallLess};
     color: ${(props) => props.theme.colors.light['shade-1']};
     font-family: ${(props) => props.theme.font.familyRegular};
-    text-transform: uppercase;
   `
 }

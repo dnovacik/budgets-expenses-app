@@ -1,7 +1,7 @@
 import { types, cast, Instance } from 'mobx-state-tree'
 import { getMonthsInYearFromNow } from './../services/date'
 import { onStoreReady } from './../services/event'
-import { ExpenseType, Budget } from './../models/index'
+import { ExpenseType, Budget, Currency } from './../models/index'
 
 export interface IBudget extends Instance<typeof BudgetModel> { }
 export interface IRootStore extends Instance<typeof RootStore> { }
@@ -21,6 +21,9 @@ const BudgetModel = types.model('Budget', {
 })
 
 const RootStore = types.model('RootStore', {
+  currency: types.enumeration<Currency>([...Object.values(Currency)]),
+  monthlyBudget: types.number,
+  startAmount: types.number,
   budgets: types.array(BudgetModel),
   selectedBudget: types.maybeNull(types.reference(BudgetModel))
 })
@@ -53,6 +56,11 @@ const RootStore = types.model('RootStore', {
     }
   }))
   .actions((self) => ({
+    initializeBaseSettings(currency: Currency, monthlyBudget: number, startAmount: number = 0) {
+      self.currency = currency
+      self.monthlyBudget = monthlyBudget
+      self.startAmount = startAmount
+    },
     initializeBudgets() {
       if (self.budgets.length > 0) {
         self.setSelectedBudget(self.budgets[0])
@@ -66,43 +74,15 @@ const RootStore = types.model('RootStore', {
           id: month.key,
           monthName: month.name,
           year: month.year,
-          budget: 2000.00 + (index * 20),
-          expenses: [
-            {
-              type: ExpenseType.GROCERIES,
-              value: 50.42 * (index + 1) * 0.2
-            },
-            {
-              type: ExpenseType.ENTERTAINMENT,
-              value: 30.42 * (index + 1) * 0.2
-            },
-            {
-              type: ExpenseType.BILLS,
-              value: 17.02 * (index + 1) * 0.2
-            },
-            {
-              type: ExpenseType.MORTGAGE,
-              value: 13.02 * (index + 1) * 0.2
-            },
-            {
-              type: ExpenseType.CLOTHES,
-              value: 8 * (index + 1) * 0.2
-            }
-          ],
+          budget: self.monthlyBudget,
+          expenses: [],
           total: 0
         }
-      })
-
-      initBudgets.map((budget) => {
-        const total = budget.expenses.map(e => e.value).reduce((prev, next) => prev + next)
-
-        budget.total = total
       })
 
       self.budgets = cast(initBudgets)
 
       self.setSelectedBudget(self.budgets[0])
-      onStoreReady()
     },
     addExpense(type: ExpenseType, value: number) {
       if (self.selectedBudget) {
@@ -115,15 +95,18 @@ const RootStore = types.model('RootStore', {
         }
       }
     },
-
   }))
   .create({
+    currency: Currency.EURO,
+    monthlyBudget: 0,
+    startAmount: 0,
     budgets: [],
     selectedBudget: null
   })
 
 export default RootStore
 
-export const initializeStore = () => {
+export const initializeStore = (currency: Currency, monthlyBudget: number, startAmount: number = 0) => {
+  RootStore.initializeBaseSettings(currency, monthlyBudget, startAmount)
   RootStore.initializeBudgets()
 }

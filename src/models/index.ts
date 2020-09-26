@@ -30,3 +30,8 @@ export interface MonthsOutput {
   name: string
   year: string
 }
+
+export enum Currency {
+  DOLLAR = '$',
+  EURO = '€'
+}
