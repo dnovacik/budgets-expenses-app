@@ -92,6 +92,13 @@ const RootStore = types.model('RootStore', {
           existingExpense.value += value
           self.sortExpenses(self.selectedBudget)
           self.calculateTotalExpense(self.selectedBudget)
+        } else {
+          self.selectedBudget.expenses.push({
+            type: type,
+            value: value
+          })
+          self.sortExpenses(self.selectedBudget)
+          self.calculateTotalExpense(self.selectedBudget)
         }
       }
     },

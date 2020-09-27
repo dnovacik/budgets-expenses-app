@@ -100,7 +100,7 @@ const CustomNavbar = {
     justify-content: flex-start;
     flex-direction: row;
     height: ${MAIN_BUTTON_WIDTH}px;
-    width: 100%;
+    width: ${width - MAIN_BUTTON_WIDTH}px;
     zIndex: 1;
   `,
   MainButtonContainer: Styled.View`

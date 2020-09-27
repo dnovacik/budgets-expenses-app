@@ -44,17 +44,6 @@ const TabNavigator = () => {
   )
 }
 
-const HomeStackNavigator = () => {
-  return (
-    <Stack.Navigator headerMode="none" initialRouteName="Dashboard">
-      <Stack.Screen name="Dashboard" component={Dashboard} />
-      <Stack.Screen name="Expenses" component={Expenses} />
-      <Stack.Screen name="Stats" component={Stats} />
-      <Stack.Screen name="Settings" component={Settings} />
-    </Stack.Navigator>
-  )
-}
-
 const Router = createStackNavigator()
 
 export default () => {

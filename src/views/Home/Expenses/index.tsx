@@ -27,6 +27,7 @@ const { height, width } = Dimensions.get('window')
 const SLICE_WIDTH = width * 0.3
 const SLICE_SPACING = width * 0.2
 const BAR_HEIGHT = 200
+const ADD_EXPENSES_BUTTON_WIDTH = width * 0.2
 
 export default observer(() => {
   const [currentSliceIndex, setCurrentSliceIndex] = useState(0)
@@ -107,8 +108,13 @@ export default observer(() => {
     )
   }
 
-  const addExpense = async () => {
-    RootStore.addExpense(ExpenseType.BILLS, 35)
+  const addExpense = () => {
+    const types = [ExpenseType.BILLS, ExpenseType.CLOTHES, ExpenseType.ENTERTAINMENT,
+      ExpenseType.GROCERIES]
+
+    const randomIndex = Math.floor(Math.random() * types.length)
+
+    RootStore.addExpense(types[randomIndex], 15)
     animate()
   }
 
@@ -222,6 +228,13 @@ export default observer(() => {
           }
         </Expenses.ChartWrapper>
       </Expenses.BottomContainer>
+      <Expenses.AddBudgetButtonContainer>
+        <Expenses.AddBudgetButtonWrapper>
+          <Expenses.AddBudgetButtonTouch onPress={() => addExpense()} onLongPress={() => addExpense()}>
+            <Expenses.AddBudgetButton name="credit-card-plus-outline" size={32} color={'#022b8d'} />
+          </Expenses.AddBudgetButtonTouch>
+        </Expenses.AddBudgetButtonWrapper>
+      </Expenses.AddBudgetButtonContainer>
     </Expenses.Layout>
   )
 })
@@ -443,6 +456,44 @@ const Expenses = {
     display: flex;
   `,
   ChartBarIconFontistoIcons: Styled(Fontisto)`
+    display: flex;
+  `,
+  AddBudgetButtonContainer: Styled.View`
+    width: ${ADD_EXPENSES_BUTTON_WIDTH}px;
+    height: ${ADD_EXPENSES_BUTTON_WIDTH}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    zIndex: 1;
+  `,
+  AddBudgetButtonWrapper: Styled.View`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 50px;
+    width: 50px;
+    background-color: #fff;
+    border-radius: 50px;
+    elevation: 5;
+    shadowColor: #000000;
+    shadowOffset: 0px 12px;
+    shadowOpacity: 0.58;
+    shadowRadius: 16px;
+  `,
+  AddBudgetButtonTouch: Styled.TouchableOpacity`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    zIndex: 1;
+  `,
+  AddBudgetButton: Styled(MaterialCommunityIcons)`
     display: flex;
   `
 }
