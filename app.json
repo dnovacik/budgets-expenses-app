@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Budgets And Expenses",
-    "slug": "budgets_and_expenses",
+    "name": "CoinSafe",
+    "slug": "CoinSafe",
     "platforms": [
       "ios",
       "android",
@@ -10,11 +10,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
-    "splash": {
-      "image": "./src/assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#022b8d"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -25,7 +20,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.ra6e.budgets.and.expenses"
+      "package": "com.ra6e.coinsafe"
     }
   }
 }

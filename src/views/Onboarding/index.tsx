@@ -68,9 +68,7 @@ export default () => {
       <Onboarding.LeftWrapper>
         <Onboarding.TitleWrapper>
           <Onboarding.SideTitle>
-            Budgets
-            <Onboarding.SideSubTitle>  and  </Onboarding.SideSubTitle>
-            Expenses
+            CoinSafe
           </Onboarding.SideTitle>
         </Onboarding.TitleWrapper>
       </Onboarding.LeftWrapper>

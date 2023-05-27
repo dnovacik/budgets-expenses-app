@@ -5,6 +5,10 @@ export const getMonthsInYearFromNow = () => {
   return getMonthsInYear(moment(), moment().add(12, 'month'))
 }
 
+export const getMonthsInYearUpUntillNow =() => {
+  return getMonthsInYear(moment().add(-12, 'month'), moment())
+}
+
 export const getMonthsInYear = (start: Moment, end: Moment): MonthsOutput[] => {
   return Array.from<MonthsOutput>({ length: end.diff(start, 'month') + 1 }).map((_, index) => {
     const month = moment(start).add(index, 'month')

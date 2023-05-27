@@ -10,7 +10,11 @@ import * as shape from 'd3-shape'
 // store
 import RootStore, { IBudget } from './../../../store/index'
 
+// services
+import { getMonthsInYearUpUntillNow } from './../../../services/date'
+
 const AnimatedText = Animated.Text
+const AnimatedView = Animated.View
 
 interface Slide {
   isActive: boolean
@@ -20,12 +24,24 @@ const { width, height } = Dimensions.get('window')
 const SLICE_WIDTH = width * 0.3
 const SLICE_SPACING = width * 0.2
 
+const startData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+const endData = [10, 25, 15, 20, 35, 50, 79, 17, 34, 62, 12]
+
 export default observer(() => {
+  const [currentData, setCurrentData] = useState(startData)
   const [currentSliceIndex, setCurrentSliceIndex] = useState(0)
   const [currentYear, setCurrentYear] = useState('2020')
 
-  const data = [10, 25, 15, 20, 35, 50, 79, 17, 34, 62, 12]
   const data2 = [10, 25, 15, 20, 35, 50, 79, 17, 34, 62, 12].reverse()
+
+  let data = startData
+
+  useEffect(() => {
+    const timer = setTimeout(() => setCurrentData(endData), 1500);
+    return () => clearTimeout(timer);
+  })
+
+  const months = getMonthsInYearUpUntillNow()
 
   const barHeightInterpolatedValue = new Animated.Value(0)
   const expensesOpacityInterpolatedValue = new Animated.Value(0)
@@ -135,12 +151,14 @@ export default observer(() => {
           }}>
           <Stats.ChartWrapper>
             <Stats.Chart
-              data={data}
+              data={currentData}
               curve={shape.curveBasis}
               svg={{
                 strokeWidth: 2,
                 stroke: '#c0ffaa'
-              }} />
+              }}
+              animate={true}
+              animationDuration={300} />
           </Stats.ChartWrapper>
           <Stats.ChartWrapper>
             <Stats.Chart
@@ -149,7 +167,8 @@ export default observer(() => {
               svg={{
                 strokeWidth: 2,
                 stroke: '#c0ffaa'
-              }} />
+              }}
+              animate={true} />
           </Stats.ChartWrapper>
           <Stats.ChartWrapper>
             <Stats.Chart
@@ -158,7 +177,8 @@ export default observer(() => {
               svg={{
                 strokeWidth: 2,
                 stroke: '#c0ffaa'
-              }} />
+              }}
+              animate={true} />
           </Stats.ChartWrapper>
         </Stats.ChartsContainer>
       </Stats.BottomContainer>
@@ -298,7 +318,7 @@ const Stats = {
     margin-right: 10px;
     align-self: center;
   `,
-  ChartWrapper: Styled.View`
+  ChartWrapper: Styled(AnimatedView)`
     display: flex;
     flex-direction: row;
     height: 150px;
