@@ -37,8 +37,8 @@ export default observer(() => {
   let data = startData
 
   useEffect(() => {
-    const timer = setTimeout(() => setCurrentData(endData), 1500);
-    return () => clearTimeout(timer);
+    const timer = setTimeout(() => setCurrentData(endData), 1500)
+    return () => clearTimeout(timer)
   })
 
   const months = getMonthsInYearUpUntillNow()
@@ -47,18 +47,21 @@ export default observer(() => {
   const expensesOpacityInterpolatedValue = new Animated.Value(0)
 
   const animate = () => {
-    Animated.parallel([
-      Animated.timing(barHeightInterpolatedValue, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: false
-      }),
-      Animated.timing(expensesOpacityInterpolatedValue, {
-        toValue: 1,
-        duration: 600,
-        useNativeDriver: true
-      })
-    ], { stopTogether: false }).start()
+    Animated.parallel(
+      [
+        Animated.timing(barHeightInterpolatedValue, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(expensesOpacityInterpolatedValue, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ],
+      { stopTogether: false }
+    ).start()
   }
 
   useEffect(() => {
@@ -84,20 +87,20 @@ export default observer(() => {
             top: 0,
             left: SLICE_SPACING,
             bottom: 0,
-            right: SLICE_SPACING
+            right: SLICE_SPACING,
           }}
           contentContainerStyle={{
             paddingHorizontal: Platform.OS === 'android' ? SLICE_SPACING : 0,
             paddingRight: SLICE_SPACING * 2.5,
-            alignItems: 'center'
+            alignItems: 'center',
           }}
-          renderItem={({ item, index }) =>
-            (
-              <Stats.SlideWrapper>
-                <Stats.SlideText isActive={index === currentSliceIndex}>{item.monthName}</Stats.SlideText>
-              </Stats.SlideWrapper>
-            )
-          }
+          renderItem={({ item, index }) => (
+            <Stats.SlideWrapper>
+              <Stats.SlideText isActive={index === currentSliceIndex}>
+                {item.monthName}
+              </Stats.SlideText>
+            </Stats.SlideWrapper>
+          )}
           onMomentumScrollEnd={(ev) => {
             const newIndex = Math.round(ev.nativeEvent.contentOffset.x / SLICE_WIDTH)
             const newSelectedBudget = RootStore.budgets[newIndex]
@@ -105,15 +108,11 @@ export default observer(() => {
             RootStore.setSelectedBudget(newSelectedBudget)
             setCurrentSliceIndex(newIndex)
             setCurrentYear(newSelectedBudget.year)
-          }}>
-        </Stats.MonthSlider>
+          }}
+        ></Stats.MonthSlider>
         <Stats.MonthSliderPointerWrapper>
-          <Stats.MonthSliderPointer>
-            |
-          </Stats.MonthSliderPointer>
-          <Stats.MonthSliderPointerText>
-            {currentYear}
-          </Stats.MonthSliderPointerText>
+          <Stats.MonthSliderPointer>|</Stats.MonthSliderPointer>
+          <Stats.MonthSliderPointerText>{currentYear}</Stats.MonthSliderPointerText>
         </Stats.MonthSliderPointerWrapper>
       </Stats.MonthSliderWrapper>
       <Stats.TotalExpensesContainer>
@@ -122,18 +121,26 @@ export default observer(() => {
         </Stats.TotalExpansesRow>
         <Stats.TotalExpansesRow>
           <Stats.TotalExpensesCurrency>€</Stats.TotalExpensesCurrency>
-          <Stats.TotalExpensesAmount style={{
-            opacity: expensesOpacityInterpolatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 1]
-            })
-          }}>{RootStore.totalExpenses()?.wholeNumber}</Stats.TotalExpensesAmount>
-          <Stats.TotalExpensesSubAmount style={{
-            opacity: expensesOpacityInterpolatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 1]
-            })
-          }}>{RootStore.totalExpenses()?.decimal}</Stats.TotalExpensesSubAmount>
+          <Stats.TotalExpensesAmount
+            style={{
+              opacity: expensesOpacityInterpolatedValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1],
+              }),
+            }}
+          >
+            {RootStore.totalExpenses()?.wholeNumber}
+          </Stats.TotalExpensesAmount>
+          <Stats.TotalExpensesSubAmount
+            style={{
+              opacity: expensesOpacityInterpolatedValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1],
+              }),
+            }}
+          >
+            {RootStore.totalExpenses()?.decimal}
+          </Stats.TotalExpensesSubAmount>
         </Stats.TotalExpansesRow>
       </Stats.TotalExpensesContainer>
       <Stats.BottomContainer>
@@ -147,18 +154,20 @@ export default observer(() => {
           snapToAlignment={'start'}
           contentContainerStyle={{
             alignItems: 'center',
-            justifyContent: 'center'
-          }}>
+            justifyContent: 'center',
+          }}
+        >
           <Stats.ChartWrapper>
             <Stats.Chart
               data={currentData}
               curve={shape.curveBasis}
               svg={{
                 strokeWidth: 2,
-                stroke: '#c0ffaa'
+                stroke: '#c0ffaa',
               }}
               animate={true}
-              animationDuration={300} />
+              animationDuration={300}
+            />
           </Stats.ChartWrapper>
           <Stats.ChartWrapper>
             <Stats.Chart
@@ -166,9 +175,10 @@ export default observer(() => {
               curve={shape.curveBasis}
               svg={{
                 strokeWidth: 2,
-                stroke: '#c0ffaa'
+                stroke: '#c0ffaa',
               }}
-              animate={true} />
+              animate={true}
+            />
           </Stats.ChartWrapper>
           <Stats.ChartWrapper>
             <Stats.Chart
@@ -176,13 +186,13 @@ export default observer(() => {
               curve={shape.curveBasis}
               svg={{
                 strokeWidth: 2,
-                stroke: '#c0ffaa'
+                stroke: '#c0ffaa',
               }}
-              animate={true} />
+              animate={true}
+            />
           </Stats.ChartWrapper>
         </Stats.ChartsContainer>
       </Stats.BottomContainer>
-
     </Stats.Layout>
   )
 })
@@ -200,7 +210,7 @@ const Stats = {
     align-items: flex-start;
     height: 20%;
   `,
-  MonthSlider: Styled(FlatList as new () => FlatList<IBudget>)`
+  MonthSlider: Styled(FlatList<IBudget>)`
     display: flex;
   `,
   MonthSliderPointerWrapper: Styled.View`
@@ -237,7 +247,8 @@ const Stats = {
   SlideText: Styled.Text<Slide>`
     display: flex;
     font-size: ${(props) => props.theme.font.size.small};
-    color: ${(props) => props.isActive ? props.theme.colors.light['shade-1'] : props.theme.colors.light['shade-3']};
+    color: ${(props) =>
+      props.isActive ? props.theme.colors.light['shade-1'] : props.theme.colors.light['shade-3']};
     font-family: ${(props) => props.theme.font.familyRegular};
   `,
   TotalExpensesContainer: Styled.View`
@@ -347,5 +358,5 @@ const Stats = {
     display: flex;
     font-size: ${(props) => props.theme.font.size.small};
     color: ${(props) => props.theme.colors.light['shade-1']};
-  `
+  `,
 }

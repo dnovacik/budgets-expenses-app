@@ -2,7 +2,13 @@
 import React, { useState, useEffect } from 'react'
 import Styled from 'styled-components/native'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
-import { FontAwesome5, MaterialCommunityIcons, Octicons, AntDesign } from '@expo/vector-icons'
+import {
+  FontAwesome5,
+  MaterialCommunityIcons,
+  Octicons,
+  AntDesign,
+  Feather,
+} from '@expo/vector-icons'
 import { Dimensions, Animated } from 'react-native'
 
 // theme
@@ -26,7 +32,7 @@ export default ({ state, descriptors, navigation }: BottomTabBarProps) => {
     Animated.timing(animationInterpolationValue, {
       toValue: navbarOpened ? 1 : 0,
       duration: duration,
-      useNativeDriver: true
+      useNativeDriver: true,
     }).start()
   }
 
@@ -35,7 +41,7 @@ export default ({ state, descriptors, navigation }: BottomTabBarProps) => {
   }, [navbarOpened])
 
   const navigateSmoothly = ({ route }: SmoothNavigationProps) => {
-    if (state.index === state.routes.findIndex(r => r.name === route)) {
+    if (state.index === state.routes.findIndex((r) => r.name === route)) {
       return
     }
 
@@ -46,46 +52,65 @@ export default ({ state, descriptors, navigation }: BottomTabBarProps) => {
   return (
     <CustomNavbar.Wrapper>
       <CustomNavbar.MainButtonContainer>
-        <CustomNavbar.MainButtonWrapper style={{
-          transform: [
-            {
-              rotate: animationInterpolationValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: ['0deg', '90deg']
-              })
-            }
-          ]
-        }}>
-          <CustomNavbar.ButtonTouch onPress={() => setNavbarOpened(!navbarOpened)} onLongPress={() => setNavbarOpened(!navbarOpened)}>
+        <CustomNavbar.MainButtonWrapper
+          style={{
+            transform: [
+              {
+                rotate: animationInterpolationValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['0deg', '90deg'],
+                }),
+              },
+            ],
+          }}
+        >
+          <CustomNavbar.ButtonTouch
+            onPress={() => setNavbarOpened(!navbarOpened)}
+            onLongPress={() => setNavbarOpened(!navbarOpened)}
+          >
             <CustomNavbar.MainButton name={'plus'} size={32} color={'#022b8d'} />
           </CustomNavbar.ButtonTouch>
         </CustomNavbar.MainButtonWrapper>
       </CustomNavbar.MainButtonContainer>
-      <CustomNavbar.NavbarButtonsWrapper style={{
-        transform: [
-          {
-            translateX: animationInterpolationValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [-300, MAIN_BUTTON_WIDTH]
-            })
-          }
-        ],
-        opacity: animationInterpolationValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0, 1]
-        })
-      }}>
-        <CustomNavbar.ButtonWrapper onPress={() => navigateSmoothly({ route: 'Stats' })} onLongPress={() => navigateSmoothly({ route: 'Stats' })}>
+      <CustomNavbar.NavbarButtonsWrapper
+        style={{
+          transform: [
+            {
+              translateX: animationInterpolationValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [-300, MAIN_BUTTON_WIDTH],
+              }),
+            },
+          ],
+          opacity: animationInterpolationValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1],
+          }),
+        }}
+      >
+        <CustomNavbar.ButtonWrapper
+          onPress={() => navigateSmoothly({ route: 'Stats' })}
+          onLongPress={() => navigateSmoothly({ route: 'Stats' })}
+        >
           <CustomNavbar.StatsButton name="chart-pie" size={32} color={'#022b8d'} />
         </CustomNavbar.ButtonWrapper>
-        <CustomNavbar.ButtonWrapper onPress={() => navigateSmoothly({ route: 'Expenses' })} onLongPress={() => navigateSmoothly({ route: 'Expenses' })}>
-          <CustomNavbar.ExpensesButton name="credit-card-minus-outline" size={32} color={'#022b8d'} />
+        <CustomNavbar.ButtonWrapper
+          onPress={() => navigateSmoothly({ route: 'Expenses' })}
+          onLongPress={() => navigateSmoothly({ route: 'Expenses' })}
+        >
+          <CustomNavbar.ExpensesButton
+            name="credit-card-minus-outline"
+            size={32}
+            color={'#022b8d'}
+          />
         </CustomNavbar.ButtonWrapper>
-        <CustomNavbar.ButtonWrapper onPress={() => navigateSmoothly({ route: 'Settings' })} onLongPress={() => navigateSmoothly({ route: 'Settings' })}>
+        <CustomNavbar.ButtonWrapper
+          onPress={() => navigateSmoothly({ route: 'Settings' })}
+          onLongPress={() => navigateSmoothly({ route: 'Settings' })}
+        >
           <CustomNavbar.SettingsButton name="settings" size={32} color={'#022b8d'} />
         </CustomNavbar.ButtonWrapper>
       </CustomNavbar.NavbarButtonsWrapper>
-
     </CustomNavbar.Wrapper>
   )
 }
@@ -172,7 +197,7 @@ const CustomNavbar = {
   ExpensesButton: Styled(MaterialCommunityIcons)`
     display: flex;
   `,
-  SettingsButton: Styled(Octicons)`
+  SettingsButton: Styled(Feather)`
     display: flex;
-  `
+  `,
 }

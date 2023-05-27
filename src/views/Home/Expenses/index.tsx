@@ -37,18 +37,21 @@ export default observer(() => {
   const expensesOpacityInterpolatedValue = new Animated.Value(0)
 
   const animate = () => {
-    Animated.parallel([
-      Animated.timing(barHeightInterpolatedValue, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: false
-      }),
-      Animated.timing(expensesOpacityInterpolatedValue, {
-        toValue: 1,
-        duration: 600,
-        useNativeDriver: true
-      })
-    ], { stopTogether: false }).start()
+    Animated.parallel(
+      [
+        Animated.timing(barHeightInterpolatedValue, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(expensesOpacityInterpolatedValue, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ],
+      { stopTogether: false }
+    ).start()
   }
 
   useEffect(() => {
@@ -60,23 +63,25 @@ export default observer(() => {
 
     if (selectedBudget) {
       return selectedBudget.expenses.map((expense, index) => {
-        const base = (expense.value / selectedBudget.total)
+        const base = expense.value / selectedBudget.total
         const percent = Math.round(parseFloat((base * 100).toFixed(2)))
         const barHeight = Math.floor(base * BAR_HEIGHT)
 
         return (
           <Expenses.ChartBarContainer key={`expense-bar-container-${index}`}>
             <Expenses.ChartBarWrapper key={`expense-bar-wrapper-${index}`}>
-              {
-                renderChartBarIcon(expense)
-              }
-              <Expenses.ChartBar style={{
-                height: barHeightInterpolatedValue.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, barHeight]
-                })
-              }}
-                height={barHeight} key={`expense-bar-${index}`} colors={['#c0ffaa', '#16ffff']}></Expenses.ChartBar>
+              {renderChartBarIcon(expense)}
+              <Expenses.ChartBar
+                style={{
+                  height: barHeightInterpolatedValue.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, barHeight],
+                  }),
+                }}
+                height={barHeight}
+                key={`expense-bar-${index}`}
+                colors={['#c0ffaa', '#16ffff']}
+              ></Expenses.ChartBar>
             </Expenses.ChartBarWrapper>
             <Expenses.ChartBarPercentage>{percent} %</Expenses.ChartBarPercentage>
             <Expenses.ChartBarSum>€ {expense.value.toFixed(2)}</Expenses.ChartBarSum>
@@ -91,26 +96,28 @@ export default observer(() => {
   const renderChartBarIcon = (expense: Expense) => {
     return (
       <Expenses.ChartBarIconWrapper>
-        {
-          expense.type === ExpenseType.GROCERIES
-            ? <Expenses.ChartBarIconFontistoIcons name="shopping-basket" size={26} color={'#fff'} />
-            : expense.type === ExpenseType.ENTERTAINMENT
-              ? <Expenses.ChartBarIconCommunityIcons name="glass-flute" size={32} color={'#fff'} />
-              : expense.type === ExpenseType.BILLS
-                ? <Expenses.ChartBarIconCommunityIcons name="home-currency-usd" size={32} color={'#fff'} />
-                : expense.type === ExpenseType.MORTGAGE
-                  ? <Expenses.ChartBarIconCommunityIcons name="bank-minus" size={32} color={'#fff'} />
-                  : expense.type === ExpenseType.CLOTHES
-                    ? <Expenses.ChartBarIconCommunityIcons name="tshirt-crew" size={32} color={'#fff'} />
-                    : null
-        }
+        {expense.type === ExpenseType.GROCERIES ? (
+          <Expenses.ChartBarIconFontistoIcons name="shopping-basket" size={26} color={'#fff'} />
+        ) : expense.type === ExpenseType.ENTERTAINMENT ? (
+          <Expenses.ChartBarIconCommunityIcons name="glass-flute" size={32} color={'#fff'} />
+        ) : expense.type === ExpenseType.BILLS ? (
+          <Expenses.ChartBarIconCommunityIcons name="home-currency-usd" size={32} color={'#fff'} />
+        ) : expense.type === ExpenseType.MORTGAGE ? (
+          <Expenses.ChartBarIconCommunityIcons name="bank-minus" size={32} color={'#fff'} />
+        ) : expense.type === ExpenseType.CLOTHES ? (
+          <Expenses.ChartBarIconCommunityIcons name="tshirt-crew" size={32} color={'#fff'} />
+        ) : null}
       </Expenses.ChartBarIconWrapper>
     )
   }
 
   const addExpense = () => {
-    const types = [ExpenseType.BILLS, ExpenseType.CLOTHES, ExpenseType.ENTERTAINMENT,
-      ExpenseType.GROCERIES]
+    const types = [
+      ExpenseType.BILLS,
+      ExpenseType.CLOTHES,
+      ExpenseType.ENTERTAINMENT,
+      ExpenseType.GROCERIES,
+    ]
 
     const randomIndex = Math.floor(Math.random() * types.length)
 
@@ -137,21 +144,21 @@ export default observer(() => {
             top: 0,
             left: SLICE_SPACING,
             bottom: 0,
-            right: SLICE_SPACING
+            right: SLICE_SPACING,
           }}
           contentContainerStyle={{
             paddingHorizontal: Platform.OS === 'android' ? SLICE_SPACING : 0,
             // check this one, can't pick last item
             paddingRight: SLICE_SPACING * 2.5,
-            alignItems: 'center'
+            alignItems: 'center',
           }}
-          renderItem={({ item, index }) =>
-            (
-              <Expenses.SlideWrapper>
-                <Expenses.SlideText isActive={index === currentSliceIndex}>{item.monthName}</Expenses.SlideText>
-              </Expenses.SlideWrapper>
-            )
-          }
+          renderItem={({ item, index }) => (
+            <Expenses.SlideWrapper>
+              <Expenses.SlideText isActive={index === currentSliceIndex}>
+                {item.monthName}
+              </Expenses.SlideText>
+            </Expenses.SlideWrapper>
+          )}
           onMomentumScrollEnd={(ev) => {
             const newIndex = Math.round(ev.nativeEvent.contentOffset.x / SLICE_WIDTH)
             const newSelectedBudget = RootStore.budgets[newIndex]
@@ -159,15 +166,11 @@ export default observer(() => {
             RootStore.setSelectedBudget(newSelectedBudget)
             setCurrentSliceIndex(newIndex)
             setCurrentYear(newSelectedBudget.year)
-          }}>
-        </Expenses.MonthSlider>
+          }}
+        ></Expenses.MonthSlider>
         <Expenses.MonthSliderPointerWrapper>
-          <Expenses.MonthSliderPointer>
-            |
-          </Expenses.MonthSliderPointer>
-          <Expenses.MonthSliderPointerText>
-            {currentYear}
-          </Expenses.MonthSliderPointerText>
+          <Expenses.MonthSliderPointer>|</Expenses.MonthSliderPointer>
+          <Expenses.MonthSliderPointerText>{currentYear}</Expenses.MonthSliderPointerText>
         </Expenses.MonthSliderPointerWrapper>
       </Expenses.MonthSliderWrapper>
       <Expenses.TotalExpensesContainer>
@@ -183,22 +186,29 @@ export default observer(() => {
           </Expenses.RowContainer>
         </Expenses.TotalExpansesRow>
         <Expenses.TotalExpansesRow>
-
           <Expenses.TotalExpensesCurrency>€</Expenses.TotalExpensesCurrency>
           <Expenses.RowContainer>
             <Expenses.TotalExpensesAmountWrapper>
-              <Expenses.TotalExpensesAmount style={{
-                opacity: expensesOpacityInterpolatedValue.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, 1]
-                })
-              }}>{RootStore.totalExpenses()?.wholeNumber}</Expenses.TotalExpensesAmount>
-              <Expenses.TotalExpensesSubAmount style={{
-                opacity: expensesOpacityInterpolatedValue.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, 1]
-                })
-              }}>{RootStore.totalExpenses()?.decimal}</Expenses.TotalExpensesSubAmount>
+              <Expenses.TotalExpensesAmount
+                style={{
+                  opacity: expensesOpacityInterpolatedValue.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 1],
+                  }),
+                }}
+              >
+                {RootStore.totalExpenses()?.wholeNumber}
+              </Expenses.TotalExpensesAmount>
+              <Expenses.TotalExpensesSubAmount
+                style={{
+                  opacity: expensesOpacityInterpolatedValue.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 1],
+                  }),
+                }}
+              >
+                {RootStore.totalExpenses()?.decimal}
+              </Expenses.TotalExpensesSubAmount>
             </Expenses.TotalExpensesAmountWrapper>
 
             <Expenses.TotalBudgetAmountWrapper>
@@ -207,7 +217,6 @@ export default observer(() => {
               </Expenses.TotalBudgetAmount>
             </Expenses.TotalBudgetAmountWrapper>
           </Expenses.RowContainer>
-
         </Expenses.TotalExpansesRow>
       </Expenses.TotalExpensesContainer>
       <Expenses.BottomContainer>
@@ -221,16 +230,18 @@ export default observer(() => {
           snapToAlignment={'start'}
           contentContainerStyle={{
             alignItems: 'center',
-            justifyContent: 'flex-start'
-          }}>
-          {
-            renderChartBars()
-          }
+            justifyContent: 'flex-start',
+          }}
+        >
+          {renderChartBars()}
         </Expenses.ChartWrapper>
       </Expenses.BottomContainer>
       <Expenses.AddBudgetButtonContainer>
         <Expenses.AddBudgetButtonWrapper>
-          <Expenses.AddBudgetButtonTouch onPress={() => addExpense()} onLongPress={() => addExpense()}>
+          <Expenses.AddBudgetButtonTouch
+            onPress={() => addExpense()}
+            onLongPress={() => addExpense()}
+          >
             <Expenses.AddBudgetButton name="credit-card-plus-outline" size={32} color={'#022b8d'} />
           </Expenses.AddBudgetButtonTouch>
         </Expenses.AddBudgetButtonWrapper>
@@ -252,7 +263,7 @@ const Expenses = {
     align-items: flex-start;
     height: 20%;
   `,
-  MonthSlider: Styled(FlatList as new () => FlatList<IBudget>)`
+  MonthSlider: Styled(FlatList<IBudget>)`
     display: flex;
   `,
   MonthSliderPointerWrapper: Styled.View`
@@ -289,7 +300,8 @@ const Expenses = {
   SlideText: Styled.Text<Slide>`
     display: flex;
     font-size: ${(props) => props.theme.font.size.small};
-    color: ${(props) => props.isActive ? props.theme.colors.light['shade-1'] : props.theme.colors.light['shade-3']};
+    color: ${(props) =>
+      props.isActive ? props.theme.colors.light['shade-1'] : props.theme.colors.light['shade-3']};
     font-family: ${(props) => props.theme.font.familyRegular};
   `,
   TotalExpensesContainer: Styled.View`
@@ -422,7 +434,7 @@ const Expenses = {
     align-items: center;
     width: 70px;
   `,
-  ChartBar: Styled(AnimatedGradient) <ChartBar>`
+  ChartBar: Styled(AnimatedGradient)<ChartBar>`
     display: flex;
     position: absolute;
     bottom: 0;
@@ -495,5 +507,5 @@ const Expenses = {
   `,
   AddBudgetButton: Styled(MaterialCommunityIcons)`
     display: flex;
-  `
+  `,
 }

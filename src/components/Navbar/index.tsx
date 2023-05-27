@@ -17,20 +17,20 @@ interface RouteImageOptions {
 const routeIcons: RouteImageOptions = {
   Dashboard: {
     icon: 'view-dashboard-outline',
-    type: 'MaterialCommunityIcons'
+    type: 'MaterialCommunityIcons',
   },
   Expenses: {
     icon: 'credit-card-minus-outline',
-    type: 'MaterialCommunityIcons'
+    type: 'MaterialCommunityIcons',
   },
   Stats: {
     icon: 'chart-donut',
-    type: 'MaterialCommunityIcons'
+    type: 'MaterialCommunityIcons',
   },
   Settings: {
     icon: 'settings',
-    type: 'Octicons'
-  }
+    type: 'Octicons',
+  },
 }
 
 interface MenuIconProps {
@@ -65,9 +65,7 @@ export default ({ state, descriptors, navigation }: BottomTabBarProps) => {
       return <Navbar.MenuItemIconOcticons {...props.props} />
     }
 
-    return (
-      <Navbar.MenuItemIconFontAwesome {...props.props} />
-    )
+    return <Navbar.MenuItemIconFontAwesome {...props.props} />
   }
 
   return (
@@ -76,9 +74,10 @@ export default ({ state, descriptors, navigation }: BottomTabBarProps) => {
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key]
 
-          const label = options.tabBarLabel
-            ? options.tabBarLabel
-            : options.title
+          const label =
+            options.tabBarLabel instanceof String
+              ? options.tabBarLabel
+              : options.title
               ? options.title
               : route.name
 
@@ -106,7 +105,14 @@ export default ({ state, descriptors, navigation }: BottomTabBarProps) => {
               accessibilityLabel={options.tabBarAccessibilityLabel}
               isActive={isActive}
             >
-              {getMenuIcon({ ...routeIcons[route.name], props: { name: routeIcons[route.name].icon, size: 30, color: isActive ? activeColor : blackColor } })}
+              {getMenuIcon({
+                ...routeIcons[route.name],
+                props: {
+                  name: routeIcons[route.name].icon,
+                  size: 30,
+                  color: isActive ? activeColor : blackColor,
+                },
+              })}
               <Navbar.MenuItemName isActive={isActive}>{label}</Navbar.MenuItemName>
             </Navbar.MenuItemWrapper>
           )

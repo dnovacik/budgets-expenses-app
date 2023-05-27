@@ -1,6 +1,7 @@
 // libs
 import React, { useState } from 'react'
 import Styled from 'styled-components/native'
+import { Picker } from '@react-native-picker/picker'
 
 // models
 import { Currency } from '../../models'
@@ -16,30 +17,31 @@ interface PickerProps {
 
 export default ({ label, value, onValueChange }: PickerProps) => {
   return (
-    <Picker.Wrapper>
-      <Picker.Label>{label}:</Picker.Label>
-      <Picker.PickerWrapper>
-        <Picker.Picker
+    <PickerView.Wrapper>
+      <PickerView.Label>{label}:</PickerView.Label>
+      <PickerView.PickerWrapper>
+        <PickerView.Picker
           selectedValue={value}
-          onValueChange={onValueChange}
+          onValueChange={(itemValue, itemIndex) => onValueChange(itemValue as Currency)}
           mode={'dialog'}
           itemStyle={{
             fontSize: 16,
             color: '#022b8d',
-            fontFamily: theme.font.familyRegular
-          }}>
-          {
-            Object.values(Currency).map((currency, index) => {
-              return <Picker.Picker.Item label={currency} value={currency} key={`currency-${index}`} />
-            })
-          }
-        </Picker.Picker>
-      </Picker.PickerWrapper>
-    </Picker.Wrapper>
+            fontFamily: theme.font.familyRegular,
+          }}
+        >
+          {Object.values(Currency).map((currency, index) => {
+            return (
+              <PickerView.Picker.Item label={currency} value={currency} key={`currency-${index}`} />
+            )
+          })}
+        </PickerView.Picker>
+      </PickerView.PickerWrapper>
+    </PickerView.Wrapper>
   )
 }
 
-const Picker = {
+const PickerView = {
   Wrapper: Styled.View`
     display: flex;
     margin: 20px 0;
@@ -67,10 +69,9 @@ const Picker = {
     color: #022b8d;
     font-family: ${(props) => props.theme.font.familyRegular};
   `,
-  Picker: Styled.Picker`
+  Picker: Styled(Picker)`
     display: flex;
     width: 100%;
     color: #022b8d;
-  `
+  `,
 }
-

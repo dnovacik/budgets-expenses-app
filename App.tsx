@@ -1,12 +1,12 @@
 // libs
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react'
 import Styled from 'styled-components/native'
-import { AppLoading } from 'expo'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Asset } from 'expo-asset'
 import * as Font from 'expo-font'
-import { StatusBar } from 'react-native'
-import { ThemeProvider } from 'styled-components/native'
+import { StatusBar, View } from 'react-native'
+import { ThemeProvider } from 'styled-components'
+import * as SplashScreen from 'expo-splash-screen'
 
 // components
 import App from './src/views/App'
@@ -17,9 +17,26 @@ import theme from './src/styled-components/theme'
 // logo
 import logo from './src/assets/icon.png'
 
+SplashScreen.preventAutoHideAsync();
+
 export default () => {
-  const [isSplashReady, setSplashReady] = useState(false)
   const [isAppReady, setAppReady] = useState(false)
+
+  useEffect(() => {
+    const prepare = async () => {
+      try {
+        await _loadAppAsync()
+      } catch (e) {
+        console.warn(e)
+
+        if (e instanceof Error) {
+          _handleLoadingError(e)
+        }
+      }
+    }
+
+    prepare();
+  }, [])
 
   const _loadAppAsync = async () => {
     await _loadResourcesAsync()
@@ -28,23 +45,9 @@ export default () => {
     }, 3500)
   }
 
-  const _loadSplashResourcesAsync = async () => {
-    await _loadSplashImagesAsync()
-    await _loadFontsAsync()
-  }
-
   const _loadResourcesAsync = async () => {
+    await _loadFontsAsync()
     await _loadImagesAsync()
-  }
-
-  const _loadSplashImagesAsync = async () => {
-    const images = [require('./src/assets/icon.png')]
-
-    const cacheImages = images.map(image => {
-        return Asset.fromModule(image).downloadAsync()
-    })
-
-    return Promise.all(cacheImages)
   }
 
   const _loadImagesAsync = async () => {
@@ -75,46 +78,29 @@ export default () => {
   const _handleLoadingError = (error: Error) => {
     // In this case, you might want to report the error to your error
     // reporting service, for example Sentry
-    console.warn(error);
-  };
-
-  const _handleSplashFinishLoading = () => {
-    setSplashReady(true)
+    console.warn(error)
   }
 
   const _handleFinishLoading = () => {
     setAppReady(true)
   }
 
-  if (!isSplashReady) {
-    return (
-      <AppLoading
-        // @ts-ignore
-        startAsync={_loadSplashResourcesAsync}
-        onError={_handleLoadingError}
-        onFinish={_handleSplashFinishLoading}
-        autoHideSplash={true}
-      />
-    )
-  }
+  const onRootLayout = useCallback(async () => {
+    if (isAppReady) {
+      await SplashScreen.hideAsync()
+    }
+  }, [isAppReady])
 
   if (!isAppReady) {
-    return (
-      <ThemeProvider theme={theme}>
-        <Splash.Layout colors={['#0574e5', '#022b8d']}>
-          <Splash.Logo
-            source={logo}
-            onLoad={_loadAppAsync}/>
-          <Splash.AppTitle>CoinSafe</Splash.AppTitle>
-        </Splash.Layout>
-      </ThemeProvider>
-    )
+    return null
   }
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar hidden={true} />
-      <App />
+      <View onLayout={onRootLayout} style={{ flex: 1}}>
+        <StatusBar hidden={true} />
+        <App />
+      </View>
     </ThemeProvider>
   )
 }

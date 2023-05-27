@@ -21,7 +21,7 @@ const Stack = createStackNavigator()
 
 const StackNavigator = () => {
   return (
-    <Stack.Navigator headerMode="none" initialRouteName="Onboarding">
+    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Onboarding">
       <Stack.Screen name="Onboarding" component={Onboarding} />
     </Stack.Navigator>
   )
@@ -31,7 +31,7 @@ const Tab = createBottomTabNavigator()
 
 const TabNavigator = () => {
   const screenOptions = (tabVisible: boolean = true) => {
-    return { options: { tabBarVisible: tabVisible ? true : false } }
+    return { options: { tabBarVisible: tabVisible ? true : false, headerShown: false } }
   }
 
   return (
@@ -49,7 +49,11 @@ const Router = createStackNavigator()
 export default () => {
   return (
     <NavigationContainer>
-      <Router.Navigator headerMode="none" initialRouteName="Onboarding">
+      <Router.Navigator
+        screenOptions={{ headerShown: false }}
+        headerShown={false}
+        initialRouteName="Onboarding"
+      >
         <Router.Screen name="Onboarding" component={StackNavigator} />
         <Router.Screen name="Home" component={TabNavigator} />
       </Router.Navigator>
